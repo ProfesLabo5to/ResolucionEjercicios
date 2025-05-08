@@ -73,4 +73,8 @@ public class Persona {
     public int antiguedad(){
         return LocalDate.now().getYear() - fechaIngresoAlBanco.getYear();
     }
+
+    public boolean esMayorDeEdad(){
+        return (LocalDate.now().getYear()-fechaNacimiento.getYear()) > 18;
+    }
 }
