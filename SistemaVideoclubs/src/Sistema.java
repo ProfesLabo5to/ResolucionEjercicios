@@ -28,4 +28,26 @@ public class Sistema {
         bajaVideoclub(videoclubViejo);
         altaVideoclub(videoclubNuevo);
     }
+
+    //punto e: direcciones de videoclub que pertenecen a una columna en particular
+    public ArrayList<String> direccionesVideoclubEnUnaComuna(int comuna){
+        ArrayList<String> direccionesVideoclub = new ArrayList<>();
+        for(Videoclub v: videoclubs){
+            if(v.getComuna() == comuna){
+                direccionesVideoclub.add(v.getDireccion());
+            }
+        }
+        return direccionesVideoclub;
+    }
+
+    //punto g: videoclub con más peliculas
+    public Videoclub videoclubConMasPeliculas(){
+        Videoclub videoclubConMasPeliculas = new Videoclub();
+        for (Videoclub v: videoclubs){
+            if(v.cantidadDePeliculas()>=videoclubConMasPeliculas.cantidadDePeliculas()){
+                videoclubConMasPeliculas = v;
+            }
+        }
+        return videoclubConMasPeliculas;
+    }
 }

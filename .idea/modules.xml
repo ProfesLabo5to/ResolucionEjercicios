@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ResolucionBancoNacion/ResolucionBancoNacion.iml" filepath="$PROJECT_DIR$/ResolucionBancoNacion/ResolucionBancoNacion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ResolucionEjercicios.iml" filepath="$PROJECT_DIR$/.idea/ResolucionEjercicios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SistemaVideoclubs/SistemaVideoclubs.iml" filepath="$PROJECT_DIR$/SistemaVideoclubs/SistemaVideoclubs.iml" />
+    </modules>
+  </component>
+</project>

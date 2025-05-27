@@ -72,4 +72,18 @@ public class Pelicula {
     public void setIdiomasDisponibles(ArrayList<Persona> idiomasDisponibles) {
         this.idiomasDisponibles = idiomasDisponibles;
     }
+    public String mostrarInfo(){
+        return nombre + " " + duracion + "min";
+    }
+
+    //punto c: actores mayores de edad
+    public ArrayList<Persona> actoresMayoresDeEdad(){
+        ArrayList<Persona> actoresMayoresDeEdad = new ArrayList<>();
+        for (Persona p: actores){
+            if (p.esMayorDeEdad()){
+                actoresMayoresDeEdad.add(p);
+            }
+        }
+        return actoresMayoresDeEdad;
+    }
 }
