@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ControlLlamadasTelefonicas/ControlLlamadasTelefonicas.iml" filepath="$PROJECT_DIR$/ControlLlamadasTelefonicas/ControlLlamadasTelefonicas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControlLlamadasTelefonicas.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ControlLlamadasTelefonicas.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControlLlamadasTelefonicas.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ControlLlamadasTelefonicas.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/ResolucionBancoNacion/ResolucionBancoNacion.iml" filepath="$PROJECT_DIR$/ResolucionBancoNacion/ResolucionBancoNacion.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ResolucionEjercicios.iml" filepath="$PROJECT_DIR$/.idea/ResolucionEjercicios.iml" />
       <module fileurl="file://$PROJECT_DIR$/SistemaVideoclubs/SistemaVideoclubs.iml" filepath="$PROJECT_DIR$/SistemaVideoclubs/SistemaVideoclubs.iml" />
