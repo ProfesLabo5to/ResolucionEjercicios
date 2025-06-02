@@ -14,14 +14,17 @@ public class Main {
         empleados.add(ana);
         empleados.add(maria);
 
-        RegistroLlamada registro = new RegistroLlamada();
+        RegistroLlamada registro = new RegistroLlamada(empleados);
 
         registro.registrarLlamada(juan, ana, 60);
         registro.registrarLlamada(juan, maria, 120);
         registro.registrarLlamada(ana, maria, 200);
         registro.registrarLlamada(maria, juan, 150);
+        registro.registrarLlamada(maria, ana, 150);
+        registro.registrarLlamada(maria, juan, 150);
+
 
         registro.mostrarLlamadasDe(juan);
-        registro.rankingExterior(empleados);
+        registro.rankingExteriorLindo();
     }
 }
