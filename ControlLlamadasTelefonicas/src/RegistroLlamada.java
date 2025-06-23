@@ -21,7 +21,7 @@ public class RegistroLlamada {
     public void mostrarLlamadasDe(Empleado empleado) {
         System.out.println("Llamadas realizadas por " + empleado.getNombreCompleto() + ": ");
         for (Llamada l : llamadas) {
-            if (l.getOrigen().getDni().equals(empleado.getDni())) {
+            if (l.getOrigen().equals(empleado)) {
                 System.out.println("Llamo a " + l.getDestino().getNombreCompleto() + " y la llamada duro: " + l.getDuracionSegundos() + " seg.");
             }
         }
@@ -52,7 +52,6 @@ public class RegistroLlamada {
             }
         }
     }
-
     private void ordenarPorDuracionDesc(ArrayList<Empleado> listaEmpleados,
                                         ArrayList<Integer> totales) {
         int n = totales.size();
