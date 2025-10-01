@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Especialidades</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        h1, h2 { color: #2c3e50; }
+        input, button { padding: 6px; margin: 4px; }
+        table { border-collapse: collapse; margin-top: 10px; }
+        td, th { border: 1px solid #ccc; padding: 6px 12px; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h1>Gestión de Especialidades por Médico</h1>
+
+    <h4>Asignar Especialidad a un Médico</h4>
+     <!-- Formulario para asignar -->
+
+    <form id="asignarForm">
+        <label for="medicoId">ID Médico:</label>
+        <input type="number" id="medicoId" required />
+        <label for="especialidadId">ID Especialidad:</label>
+        <input type="number" id="especialidadId" required />
+        <button type="submit">Asignar</button>
+    </form>
+    <p id="asignarMensaje"></p>
+
+    <!-- Conteo especialidad -->
+    <h4>Conteo de Especialidades por Médico</h4>
+    <button onclick="verConteo()">Ver Conteo</button>
+    <ul id="conteoEspecialidades"></ul>
+
+    <!-- Detalle especialidad -->
+    <h4>Detalle de Especialidades por Médico</h4>
+    <button onclick="verDetalle()">Ver Detalle</button>
+    <ul id="detalleEspecialidades"></ul>
+
+    <hr>
+
+    <h1>Especialidades</h1>
+
+    <!-- Formulario para agregar -->
+    <form id="formEspecialidad">
+        <input type="text" id="detalle" placeholder="Nombre de la especialidad" required />
+        <button type="submit">Agregar</button>
+    </form>
+
+
+    <!-- Filtro por letra -->
+    <h4>Filtrar por letra inicial</h4>
+    <input type="text" id="filtroLetra" maxlength="1" placeholder="Ej: C" />
+    <button onclick="filtrarPorLetra()">Filtrar</button>
+
+    <!-- Cantidades -->
+    <h4>Cantidad por letra inicial</h4>
+    <button onclick="verCantidadPorLetra()">Ver</button>
+    <ul id="cantidades"></ul>
+
+    <!-- Agrupadas -->
+    <h4>Especialidades agrupadas por letra</h4>
+    <button onclick="verAgrupadas()">Ver agrupadas</button>
+    <ul id="agrupadas"></ul>
+
+    <!-- Tabla principal -->
+    <h4>Listado completo</h4>
+    <button onclick="cargarEspecialidades()">Actualizar lista</button>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Detalle</th><th>Acciones</th></tr>
+        </thead>
+        <tbody id="tablaEspecialidades"></tbody>
+    </table>
+
+    <script>
+        const urlEspecialidades = "http://localhost:8080/api/especialidades";
+        const urlMedicosEspecialidades = "http://localhost:8080/api/especialidades-por-medico";
+
+
+        const tabla = document.getElementById("tablaEspecialidades");
+        const listaAgrupadas = document.getElementById("agrupadas");
+        const listaCantidades = document.getElementById("cantidades");
+
+        // Listar todas especialidades
+        function cargarEspecialidades() {
+            fetch(urlEspecialidades)
+                .then(res => res.json())
+                .then(data => {
+                    tabla.innerHTML = "";
+                    data.forEach(e => {
+                        let fila = `<tr>
+                            <td>${e.id}</td>
+                            <td>${e.detalle}</td>
+                            <td><button onclick="eliminar(${e.id})">Eliminar</button></td>
+                        </tr>`;
+                        tabla.innerHTML += fila;
+                    });
+                });
+        }
+
+        
+        // Crear especialidad
+        document.getElementById("formEspecialidad").onsubmit = e => {
+            e.preventDefault();
+            const detalle = document.getElementById("detalle").value;
+
+            fetch(urlEspecialidades, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ detalle })
+            })
+            .then(res => {
+                if (!res.ok) return res.text().then(txt => { throw new Error(txt); });
+                return res.json();
+            })
+            .then(() => {
+                document.getElementById("formEspecialidad").reset();
+                cargarEspecialidades();
+            })
+            .catch(err => alert("Error: " + err.message));
+        };
+
+        // Eliminar especialidad 
+        function eliminar(id) {
+            fetch(`${urlEspecialidades}/${id}`, { method: "DELETE" })
+                .then(res => {
+                    if (!res.ok) return res.text().then(txt => { throw new Error(txt); });
+                    cargarEspecialidades();
+                })
+                .catch(err => alert("Error: " + err.message));
+        }
+
+        // Filtrar por letra
+        function filtrarPorLetra() {
+            const letra = document.getElementById("filtroLetra").value.toUpperCase();
+            if (!letra) return;
+
+            fetch(`${urlEspecialidades}/letra/${letra}`)
+                .then(res => res.json())
+                .then(data => {
+                    tabla.innerHTML = "";
+                    data.forEach(e => {
+                        tabla.innerHTML += `<tr>
+                            <td>${e.id}</td>
+                            <td>${e.detalle}</td>
+                            <td><button onclick="eliminar(${e.id})">Eliminar</button></td>
+                        </tr>`;
+                    });
+                });
+        }
+
+        // Cantidad por letra
+        function verCantidadPorLetra() {
+            fetch(`${urlEspecialidades}/cantidad-por-letra`)
+                .then(res => res.json())
+                .then(data => {
+                    listaCantidades.innerHTML = "";
+                    for (let letra in data) {
+                        listaCantidades.innerHTML += `<li>${letra}: ${data[letra]} especialidad(es)</li>`;
+                    }
+                });
+        }
+
+        // Agrupadas por letra
+        function verAgrupadas() {
+            fetch(`${urlEspecialidades}/agrupadas`)
+                .then(res => res.json())
+                .then(data => {
+                    listaAgrupadas.innerHTML = "";
+                    for (let letra in data) {
+                        const nombres = data[letra].map(e => e.detalle).join(", ");
+                        listaAgrupadas.innerHTML += `<li>${letra}: ${nombres}</li>`;
+                    }
+                });
+        }
+
+        // Asignar medico a especialidad
+        document.getElementById("asignarForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const medicoId = document.getElementById("medicoId").value;
+            const especialidadId = document.getElementById("especialidadId").value;
+
+            fetch(urlMedicosEspecialidades, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: {
+                        medicoId: medicoId,
+                        especialidadId: especialidadId
+                    },
+                    medico: {
+                        id: medicoId
+                    },
+                    especialidad: {
+                        id: especialidadId
+                    }
+                })
+            })
+                .then(response => response.text())
+                .then(msg => {
+                document.getElementById("asignarMensaje").innerText = msg;
+                })
+                .catch(err => {
+                console.error(err);
+                document.getElementById("asignarMensaje").innerText = "Ocurrió un error.";
+                });
+        });
+
+        // Conteo especialidad por médico
+        function verConteo() {
+            fetch(`${urlMedicosEspecialidades}/conteo-especialidades`)
+                .then(resp => resp.json())
+                .then(data => {
+                const ul = document.getElementById("conteoEspecialidades");
+                ul.innerHTML = "";
+                for (let medico in data) {
+                    const li = document.createElement("li");
+                    li.textContent = `${medico}: ${data[medico]} especialidades`;
+                    ul.appendChild(li);
+                }
+                });
+        }
+
+        // Detalles especialidades por médico
+        function verDetalle() {
+            fetch(`${urlMedicosEspecialidades}/detalle-especialidades`)
+                .then(resp => resp.json())
+                .then(data => {
+                const ul = document.getElementById("detalleEspecialidades");
+                ul.innerHTML = "";
+                data.forEach(medico => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${medico.nombre} ${medico.apellido}:</strong> ${medico.especialidades.join(", ")}`;
+                    ul.appendChild(li);
+                });
+                });
+        }
+
+
+        // ▶ Inicial
+        cargarEspecialidades();
+    </script>
+</body>
+</html>
